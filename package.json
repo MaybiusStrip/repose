@@ -20,6 +20,8 @@
   "bugs": {
     "url": "https://github.com/MaybiusStrip/repose/issues"
   },
-  "homepage": "https://github.com/MaybiusStrip/repose"
+  "homepage": "https://github.com/MaybiusStrip/repose",
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
 }
-
