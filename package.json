@@ -1,0 +1,25 @@
+{
+  "name": "repose",
+  "version": "0.0.0",
+  "description": "RESTful controllers for express/mongoose.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/MaybiusStrip/repose.git"
+  },
+  "keywords": [
+    "rest",
+    "express",
+    "mongoose"
+  ],
+  "author": "Martin Wintz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaybiusStrip/repose/issues"
+  },
+  "homepage": "https://github.com/MaybiusStrip/repose"
+}
+
