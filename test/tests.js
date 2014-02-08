@@ -60,5 +60,40 @@ describe('Controller routes', function(){
 
   });
 
+  describe('POST', function () {
+
+    describe('/task', function () {
+      it('should create a task with the provided data', function (done) {
+
+        request(URL)
+          .post('/task')
+          .send({
+            name: 'Task 1',
+            dueDate: new Date(2014, 1, 1, 0, 0, 0, 0)
+          })
+          .set('Accept', 'application/json')
+          .expect(200)
+          .end(function(err, res) {
+            if (err) throw err;
+            res.body.should.have.property('_id');
+            res.body.should.have.property('name');
+            res.body.should.have.property('dueDate');
+            res.body.name.should.equal('Task 1');
+            res.body.dueDate.should.equal((new Date(2014, 1, 1, 0, 0, 0, 0)).toISOString());
+
+            Task.findById(res.body._id, function (err, task) {
+              if (err) throw err;
+              should.exist(task);
+              task._id.toString().should.equal(res.body._id);
+              done();
+            });
+          });
+
+      });
+    });
+
+  });
+
 
 });
+
