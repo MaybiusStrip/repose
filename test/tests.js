@@ -4,9 +4,13 @@ var request = require('supertest');
 var mongoose = require('mongoose');
 var repose = require('../index.js');
 
-require('./models/task');
-var Task = mongoose.model('Task');
+var fixtures = require('./fixtures.js');
+
+require('./models/user');
+var User = mongoose.model('User');
+
 var URL = 'http://localhost:3001';
+
 describe('Controller routes', function(){
 
   before(function (done) {
@@ -16,8 +20,8 @@ describe('Controller routes', function(){
     app.configure(function () {
       app.use(express.json());
       app.use(express.urlencoded());
-      var TaskController = new repose.Controller(Task);
-      repose.bindRoutes(app, TaskController);
+      var UserController = new repose.Controller(User);
+      repose.bindRoutes(app, UserController);
 
       app.listen(3001);
       done();
@@ -25,66 +29,67 @@ describe('Controller routes', function(){
 
   });
 
-  afterEach(function (done) {
-    Task.remove({}, done);
+  beforeEach(function (done) {
+    fixtures.setup(done);
   });
 
-  describe('GET', function () {
+  afterEach(function (done) {
+    fixtures.tearDown(done);
+  });
 
-    describe('/task/:id', function () {
-      it('should return the task with that id', function (done) {
+  describe('get', function () {
 
-        var task = new Task({
-          name: 'Task 1',
-          dueDate: new Date(2014, 1, 1, 0, 0, 0, 0)
-        });
+    describe('/user/:id', function () {
+      it('should return the user with that id', function (done) {
 
-        task.save(function (err, task) {
-          if (err) throw err;
+        var user = fixtures.users[0];
 
-          request(URL)
-            .get('/task/' + task._id)
-            .expect(200)
-            .end(function(err, res) {
-              if (err) throw err;
-              res.body.should.have.property('_id');
-              res.body._id.should.equal(task._id.toString());
-              res.body.name.should.equal(task.name);
-              res.body.dueDate.should.equal(task.dueDate.toISOString());
-              done();
-            });
-        });
+        request(URL)
+          .get('/user/' + user._id)
+          .expect(200)
+          .end(function(err, res) {
+            if (err) throw err;
+            res.body.should.have.property('_id');
+            res.body._id.should.equal(user._id.toString());
+            res.body.name.should.equal(user.name);
+            res.body.joinDate.should.equal(user.joinDate.toISOString());
+            done();
+          });
 
       });
     });
 
   });
 
-  describe('POST', function () {
+  describe('post', function () {
 
-    describe('/task', function () {
-      it('should create a task with the provided data', function (done) {
+    describe('/user', function () {
+      it('should create a user with the provided data', function (done) {
+
+        var user = {
+          name: 'Randy Marsh',
+          joinDate: new Date(2014, 1, 1, 0, 0, 0, 0)
+        };
 
         request(URL)
-          .post('/task')
-          .send({
-            name: 'Task 1',
-            dueDate: new Date(2014, 1, 1, 0, 0, 0, 0)
-          })
+          .post('/user')
+          .send(user)
           .set('Accept', 'application/json')
           .expect(200)
           .end(function(err, res) {
             if (err) throw err;
             res.body.should.have.property('_id');
             res.body.should.have.property('name');
-            res.body.should.have.property('dueDate');
-            res.body.name.should.equal('Task 1');
-            res.body.dueDate.should.equal((new Date(2014, 1, 1, 0, 0, 0, 0)).toISOString());
+            res.body.should.have.property('joinDate');
+            res.body.name.should.equal(user.name);
+            res.body.joinDate.should.equal(user.joinDate.toISOString());
 
-            Task.findById(res.body._id, function (err, task) {
+            User.findById(res.body._id, function (err, user) {
               if (err) throw err;
-              should.exist(task);
-              task._id.toString().should.equal(res.body._id);
+              should.exist(user);
+              user._id.toString().should.equal(res.body._id);
+              user.name.should.equal(user.name);
+              user.joinDate.should.equal(user.joinDate);
               done();
             });
           });
