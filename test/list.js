@@ -34,7 +34,7 @@ module.exports = function () {
   });
 
   describe('/user?name=Eric Cartman', function () {
-    it('should respond with an array of all users', function (done) {
+    it('should respond with an array with the user "Eric Cartman" in it', function (done) {
 
       var users = fixtures.users;
 
