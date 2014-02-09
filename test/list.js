@@ -13,6 +13,8 @@ module.exports = function () {
   describe('/user', function () {
     it('should respond with an array of all users', function (done) {
 
+      var users = fixtures.users;
+
       request(URL)
         .get('/user')
         .expect(200)
