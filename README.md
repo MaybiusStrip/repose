@@ -1,3 +1,5 @@
+*Author's note: Repose is under development. Changes are pushed frequently, so feel free to follow along.*
+
 Repose
 =======
 
