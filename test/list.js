@@ -10,20 +10,21 @@ var URL = 'http://localhost:3001';
 
 module.exports = function () {
 
-  describe('/user/:id', function () {
-    it('should return the user with that id', function (done) {
-
-      var user = fixtures.users[0];
+  describe('/user', function () {
+    it('should respond with an array of all users', function (done) {
 
       request(URL)
-        .get('/user/' + user._id)
+        .get('/user')
         .expect(200)
         .end(function(err, res) {
           if (err) throw err;
-          res.body.should.have.property('_id');
-          res.body._id.should.equal(user._id.toString());
-          res.body.name.should.equal(user.name);
-          res.body.joinDate.should.equal(user.joinDate.toISOString());
+
+          res.body.should.be.an.instanceOf(Array)
+            .with.lengthOf(users.length);
+          res.body[0].should.have.property('_id');
+          res.body[0].should.have.property('name');
+          res.body[0].should.have.property('joinDate');
+
           done();
         });
 

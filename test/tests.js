@@ -1,4 +1,3 @@
-var should = require('should');
 var express = require('express');
 var mongoose = require('mongoose');
 var repose = require('../index.js');
@@ -37,6 +36,7 @@ describe('Controller routes', function(){
 
   describe('get', require('./get'));
   describe('create', require('./create'));
+  describe('list', require('./list'));
 
 
 });
